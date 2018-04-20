@@ -33,7 +33,6 @@ From the stored earnings, we can calculate the mean profit to get an idea of how
 
 We have made a sample of 35 students, tested if any of them share a birthday, and doled out profits depending if Brownlow wins or loses the bet. Next, we repeat that test a total of 1137 times to reflect the potential earnings Brownlow has made in total. Shown as our "brownProfit," the total profit was $582. 
 ```{r}
-require(mosaic)
 betarray <- numeric()
 for (j in 1:100){
 brownProfit = 0
@@ -55,6 +54,16 @@ That loop of total tests is repeated 100 times with profits assigned to an array
 # Confidence interval of Brownlows earning
 
 <!--Explain and display your method of coming up with a 95% confidence interval of  professor Brownlows-->
+
+
+We now want to construct a 95% confidence interval. In order to find this range, we will calculate two standard deviations below and above the mean.   
+```{r}
+est <- mean(betarray)
+sd <- sd(betarray)
+conf <- c(est - 2*sd, est + 2*sd)
+conf
+```
+Our 95% confidence interval is `r round(conf)`, meaning that if we repeated our test, the mean profit would lie somewhere between this range 95% of the time.
 
 
 # Discussion and Conclusion
