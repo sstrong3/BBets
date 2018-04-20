@@ -1,7 +1,7 @@
 ---
 title: "Brownlows Bets"
-author: "Put your name here!"
-date: "put the date here"
+author: "Skye Strong"
+date: "19 April 2018"
 output: html_document
 ---
 
@@ -11,6 +11,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 require(mosaic)
 ```
+
 
 # Introduction
 
@@ -25,6 +26,7 @@ require(mosaic)
 In order to calculate an estimate of Professor Brownlow's earnings, we need to create a simulation of the total wagers Professor Brownlow claims to have made. First, we will make a test class of 35 students and compare their birthdays. We create a sample of 365 possible birthdays, extract a random 35 of them (1 birthday per student), and check if any of those birthdays are the same. We then repeat this test 1137 times to match the amount of times Professor Brownlow made the bet. From each test, if any birthdays are duplicated, we add 1 dollar to Brownlow's earnings; if there are no duplicated birthdays, we deduct 2 dollars from Brownlow's earnings. In order to make a more accurate prediction, we will repeat our set of 1137 wagers 100 times and save the resultant earnings in an array.  
 
 From the stored earnings, we can calculate the mean profit to get an idea of how much money Brownlow might have earned after making this bet 1137 times. In order to construct a 95% confidence interval, we will examine the imperical data from our array of profits, and apply the standard deviation to the mean. Going two standard deviations below the mean and two standard deviations above the mean will give the required confidence interval.
+
 
 #Profit Estimate
 
@@ -70,3 +72,44 @@ Our 95% confidence interval is `r round(conf)`, meaning that if we repeated our 
 
 <!--Discussion and conclusion here.  If professor Brownlow is consistantly making or losing money how could he change his payout so that his profits center on zero?  Also discuss what size his class should be in order to have his current scheme balance at zero profit.!-->
 
+In conclusion, by repeating Brownlow's 1137 wagers 100 times using a random sample, we estimated an average profit of $`r round(mean(betarray))`. It is important to note that the number of students in the class, as well as the amount Brownlow wagered, influenced the possible amount of earnings. Below we take a look at how changing either of these variables could change our results.
+
+### Repeated Test - Smaller Class Size  
+
+With a class size of 35 students, Professor Brownlow is making a profit. If there were less students, the chances of them having the same birthday (out of 365 possibilities) decreases, thus Brownlow's chances of making a profit decreases. On the other hand if there were more students, the chances of any two of them having the same birthday would increase, thereby increasing the chances of Brownlow making an even larger profit.  
+```{r}
+test2 <- numeric()
+for (j in 1:100){
+brownProfit2 = 0
+bdays2 <- (1:365)
+for (i in 1:1137){
+students2 <- sample(bdays2, 28, replace = TRUE)
+xx2 <- duplicated(students2)
+WinLose2 <- sum(xx2)
+if (WinLose2 >= 1) brownProfit2 = brownProfit2 + 1 else brownProfit2 = brownProfit2 - 2
+}
+test2[j]=brownProfit2
+}
+favstats(test2)
+```
+We see from the above test that just by reducing the class size from 35 students to 28 students, Brownlow's profit changes to loss, with an average $`r round(mean(test2))`. Although the results are not shown, repeating this test with 27 students led to an even larger loss while having 29 students resulted in a small profit. If we factor in the standard deviation, it is possible to conclude that in order for his profit to balance at zero, his class size could be around 28 students.
+
+### Repeated Test - Larger Wager
+
+Brownlow's initial wager of $2 to every student's $1 also affects the potential earnings from the bet. Let's take a look at how increasing the wager (keeping the original 35 students) changes our results.  
+```{r}
+test3 <- numeric()
+for (j in 1:100){
+brownProfit3 = 0
+bdays3 <- (1:365)
+for (i in 1:1137){
+students3 <- sample(bdays3, 35, replace = TRUE)
+xx3 <- duplicated(students3)
+WinLose3 <- sum(xx3)
+if (WinLose3 >= 1) brownProfit3 = brownProfit3 + 1 else brownProfit3 = brownProfit3 - 4
+}
+test3[j]=brownProfit3
+}
+favstats(test3)
+```
+By simply doubling Brownlow's original wager of $2 to $4, his mean earnings are down to under $100. Even though one might have assumed that a larger wager would result in a bigger payoff, it appears that the number of times he lost the bet led to a decrease in his profit. Logically, we might conclude that if the wager was increased even more, Brownlow's profit would reduce to zero, and he would end up losing money.
