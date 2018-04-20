@@ -27,6 +27,18 @@ output: html_document: default
 
 <!--Explain and display your method of coming up with a 95% confidence interval of  professor Brownlows-->
 
+We now want to construct a 95% confidence interval. In order to find this range, we will calculate two standard deviations below and above the mean.   
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(mosaic)
+```
+```{r}
+est <- mean(betarray)
+sd <- sd(betarray)
+conf <- c(est - 2*sd, est + 2*sd)
+conf
+```
+Our 95% confidence interval is `r round(conf)`, meaning that if we repeated our test, the mean profit would lie somewhere between this range 95% of the time.
 
 # Discussion and Conclusion
 
