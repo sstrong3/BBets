@@ -2,8 +2,8 @@
 title: "Brownlows Bets"
 author: "Put your name here!"
 date: "put the date here"
-output: html_document: default
- ---
+output: html_document
+---
 
 <!-- We recommend you use git branches -- create a separate branch for each major section i.e. Introduction, Methods, Results, Inferential Results, and Discussion and Conclusions - leave the YAML block untouched until the final merge where you put in your own name !-->
 
@@ -21,7 +21,25 @@ output: html_document: default
 #Profit Estimate
 
 <!--Explain and display the results of your method of coming up with the estimate of professor Brownlows betting!-->
-
+We have made a sample of 35 students, tested if any of them share a birthday, and doled out profits depending if Brownlow wins or loses the bet. Next, we repeat that test a total of 1137 times to reflect the potential earnings Brownlow has made in total. Shown as our "brownProfit," the total profit was $582. 
+```{r}
+require(mosaic)
+betarray <- numeric()
+for (j in 1:100){
+brownProfit = 0
+bdays <- (1:365)
+for (i in 1:1137){
+students <- sample(bdays, 35, replace = TRUE)
+xx <- duplicated(students)
+WinLose <- sum(xx)
+if (WinLose >= 1) brownProfit = brownProfit + 1 else brownProfit = brownProfit - 2
+}
+betarray[j]=brownProfit
+}
+hist(betarray)
+favstats(betarray)
+```
+That loop of total tests is repeated 100 times with profits assigned to an array called "betarray." We then performed the `favstats` function on our array and found that the mean profit was $`r round(mean(betarray))`. In other words, after making his birthday wager 1137 times, and then repeating that 100 more times for accuracy, we can estimate that the total profit Professor Brownlow made was $`r round(mean(betarray))`. 
 
 # Confidence interval of Brownlows earning
 
